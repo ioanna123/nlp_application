@@ -96,7 +96,7 @@ class Client:
         """
         Request to retrieve information regarding a request.
 
-        :param request_id: The ID of the pair-matching request id.
+        :param request_id: The ID of the request id.
         :return: An instance containing request metadata (id, status, etc.).
         """
 

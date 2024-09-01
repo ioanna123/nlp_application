@@ -41,7 +41,7 @@ def search_jobs(
         search_query = search_params_to_data_model(
             status=status, client=client, date_from=date_from, date_to=date_to
         )
-        logger.info(f"Running search for pairwise request with params: {search_query}")
+        logger.info(f"Running search for request with params: {search_query}")
         return controller.search(search=search_query)
     except ValidationError:
         raise HTTPException(422, "Invalid query params")

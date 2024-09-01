@@ -116,7 +116,7 @@ class TestBaseControllerPredict(TestCase):
             self.base_controller.predict(None)
 
 
-class TestR2CPairControllerUpdate(TestCase):
+class TestControllerUpdate(TestCase):
     def setUp(self):
         self.postgresql = testing.postgresql.Postgresql()
         self.engine = create_engine(self.postgresql.url())
