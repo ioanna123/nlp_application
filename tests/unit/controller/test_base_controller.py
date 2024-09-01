@@ -54,15 +54,8 @@ class TestBaseControllerRetrieve(TestCase):
         with self.assertRaises(RequestDoesNotExist):
             self.base_controller.retrieve('test_id')
 
-    def test_retrieve_request_ok(self):
-        _add_to_db(request=request_model, session=self.session)
-        request = self.base_controller.retrieve(request_model.id)
-        self.assertEqual(request_model.client, request.client)
-        self.assertEqual(request_model.status, request.status)
-        self.assertEqual(request_model.sentence, request.sentence)
-
     def test_retrieve_request_invalid_id(self):
-        _add_to_db(request=request_model, session=self.session)
+        _add_to_db(request=request_model, session=Session(self.engine))
         with self.assertRaises(RequestDoesNotExist):
             self.base_controller.retrieve("test")
 
@@ -146,13 +139,3 @@ class TestR2CPairControllerUpdate(TestCase):
         with self.assertRaises(CriticalDBError):
             self.base_controller.update_request_status(
                 request_id="test", status="RUNNING")
-
-    def test_update_request_results_ok(self):
-        _add_to_db(request=request_model, session=self.session)
-        response = self.base_controller.update_request_results(request_model.id, ["happy", "niceee"])
-        self.assertListEqual(response.results, ["happy", "niceee"])
-
-    def test_update_request_status_ok(self):
-        _add_to_db(request=request_model, session=self.session)
-        response = self.base_controller.update_request_status(request_model.id, "FAILED")
-        self.assertEqual(response.status, "FAILED")

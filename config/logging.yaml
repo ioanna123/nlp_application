@@ -16,7 +16,7 @@ handlers:
     filters: [ ]
 
 loggers:
-  ds-metadata-linking:
+  service:
     level: INFO
     handlers: [ console ]
     propagate: no

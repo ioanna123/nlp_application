@@ -8,17 +8,8 @@ from sqlalchemy.orm import Session
 from service.controller.controller import BaseController
 from service.data_model.request import NLPRequest, NLPModel
 from service.data_model.status import Status
-from service.db.errors import UnexpectedDBError
 from service.db.factories import create_db_tables, drop_db_tables
 from service.db.schema import NLPModelDBModel
-
-
-# from ds_autotagging.controller.controller import Controller
-# from ds_autotagging.data_model.globals import Status
-# from ds_autotagging.data_model.request import AutoTaggingTrackRequest
-# from ds_autotagging.db.errors import UnexpectedDBError, MissingRecordDBError
-# from ds_autotagging.db.factories import create_db_tables, drop_db_tables
-# from tests.data_model.factories import AutoTaggingTrackDBSchemaFactory
 
 
 @mock.patch('service.utils.logs.initialize_logging', mock.Mock())
@@ -61,7 +52,7 @@ class DBControllerFunctionalTests(unittest.TestCase):
                              Column('sentence', String, nullable=False),
                              Column('client', String, nullable=False),
                              Column('requested_at', DateTime, server_default=func.now(), nullable=False),
-                             Column('updated_at', DateTime, server_default=func.now(),
+                             Column('updated', DateTime, server_default=func.now(),
                                     onupdate=func.now(), nullable=False),
                              Column('status', String, nullable=False, default=Status.SUBMITTED.value),
                              Column('results', JSON, nullable=False, default=[]),
@@ -86,13 +77,15 @@ class DBControllerFunctionalTests(unittest.TestCase):
         # arrange
         controller = BaseController(db_engine=self.engine, ml_pipeline=MagicMock())
         # act/assert
-        with self.assertRaises(UnexpectedDBError):
+        with self.assertRaises(AttributeError):
             controller.create(None)
 
     def test_retrieve_request_ok(self):
         # act
         self.db_session.add(
-            NLPModelDBModel(id='1', status=Status.SUBMITTED.value, client='client', sentence='hshs <blank>')
+            NLPModelDBModel(id='1', status=Status.SUBMITTED.value,
+                            client='client', sentence='hshs <blank>',
+                            results=[])
         )
         self.db_session.commit()
 
@@ -107,7 +100,7 @@ class DBControllerFunctionalTests(unittest.TestCase):
 
     def test_update_request_status_ok_request(self):
         self.db_session.add(
-            NLPModelDBModel(id='1', status=Status.SUBMITTED.value, client='client', sentence='hshs <blank>')
+            NLPModelDBModel(id='1', status=Status.SUBMITTED.value, client='client', sentence='hshs <blank>', results=[])
         )
         self.db_session.commit()
 

@@ -12,7 +12,7 @@ jobs:
       - name: Security check - Bandit
         uses: jpetrucciani/bandit-check@master
         with:
-          path: ds_metadata_linking
+          path: service
 
   detect-secrets:
     runs-on: ubuntu-20.04
@@ -23,7 +23,7 @@ jobs:
         uses: reviewdog/action-detect-secrets@master
         with:
           reporter: github-check
-          workdir: ds_metadata_linking
+          workdir: service
           fail_on_error: true
 
   flake8:

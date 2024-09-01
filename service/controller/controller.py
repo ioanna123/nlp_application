@@ -77,7 +77,7 @@ class Controller(ABC):
     def update_request_status(self, request_id: str, status: str) -> NLPModel:
         with self.db_session as session:
             try:
-                request = self._get_request_from_db(request_id=request_id)
+                request = session.query(NLPModelDBModel).get(request_id)
                 if request:
                     request.status = status
                     session.add(request)
@@ -93,7 +93,7 @@ class Controller(ABC):
     def update_request_results(self, request_id: str, results: List[str]) -> NLPModel:
         with self.db_session as session:
             try:
-                request = self._get_request_from_db(request_id=request_id)
+                request = session.query(NLPModelDBModel).get(request_id)
                 if request:
                     request.results = results
                     session.add(request)

@@ -1,6 +1,6 @@
-import datetime
 import logging
 import os
+from datetime import datetime, timezone
 
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -74,8 +74,8 @@ class JWTFactory:
         :return: string the token.
         """
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=self._duration),
-            'iat': datetime.datetime.utcnow(),
+            'exp': datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(days=0, seconds=self._duration),
+            'iat': datetime.datetime.now(tz=timezone.utc),
             'alg': self._algorithm
         }
 
