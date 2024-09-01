@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # API service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api_container
+    command: sh -c 'poetry run uvicorn service.app.__main__:api --host 0.0.0.0 --port 8000'
+    ports:
+      - "8000:8000"
+    environment:
+      PSQL_CONNECTION_URL: 'postgresql://postgres:postgres@db:5432/postgres'
+      JWT_SECRET: test
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # PostgreSQL service
+  db:
+    image: postgres:13
+    container_name: postgres_container
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432" 
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
