@@ -1,0 +1,16 @@
+name: CI
+
+on: push
+
+jobs:
+
+  run_linters:
+    uses: ./.github/workflows/run_linters.yml
+
+  run_tests:
+    needs: [ run_linters ]
+    uses: ./.github/workflows/run_tests.yml
+
+  build_images:
+    needs: [ run_tests ]
+    uses: ./.github/workflows/build_image.yml

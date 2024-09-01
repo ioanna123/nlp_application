@@ -1,0 +1,71 @@
+name: Run Linters
+
+on:
+  workflow_call:
+
+jobs:
+  bandit-security-check:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: check-out repo
+        uses: actions/checkout@v4
+      - name: Security check - Bandit
+        uses: jpetrucciani/bandit-check@master
+        with:
+          path: ds_metadata_linking
+
+  detect-secrets:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: check-out repo
+        uses: actions/checkout@v4
+      - name: detect-secrets
+        uses: reviewdog/action-detect-secrets@master
+        with:
+          reporter: github-check
+          workdir: ds_metadata_linking
+          fail_on_error: true
+
+  flake8:
+    needs: [ bandit-security-check, detect-secrets ]
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - name: check-out repo
+        uses: actions/checkout@v4
+      - name: Install Python 3.10
+        uses: actions/setup-python@v5.1.0
+        with:
+          python-version: '3.10'
+      - name: Install flake8
+        run: python -m pip install  flake8
+      - name: Run flake8
+        run: |
+          flake8 .
+
+  refurb:
+    needs: [ bandit-security-check, detect-secrets ]
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Python 3.10
+        uses: actions/setup-python@v5.1.0
+        with:
+          python-version: '3.10'
+      - name: Install refurb
+        run: pip3 install refurb
+      - name: Run refurb
+        run: refurb service --python-version 3.10
+
+  docker-lint:
+    needs: [ bandit-security-check, detect-secrets ]
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          ignore: DL3008,SC2102
