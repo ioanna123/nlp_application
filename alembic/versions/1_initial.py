@@ -2,13 +2,12 @@ import logging
 from uuid import uuid4
 
 from alembic import op
-from sqlalchemy import Column, String, JSON, DateTime, func, null
+from sqlalchemy import Column, String, JSON, DateTime, func
 from sqlalchemy.engine import Connection
 
-from service.db.schema import Base
 from service.data_model.status import Status
 from service.db.factories import create_db_engine
-
+from service.db.schema import Base
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +19,7 @@ depends_on = None
 
 def upgrade():
     """
-    If missing, creates the metadata_linking_jobs table.
+    If missing, creates the table.
     """
 
     engine = create_db_engine()

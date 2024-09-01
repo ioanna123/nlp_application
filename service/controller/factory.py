@@ -11,4 +11,3 @@ def create_base_controller() -> BaseController:
         db_engine=db_engine,
         ml_pipeline=ml_pipeline
     )
-

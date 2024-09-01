@@ -1,8 +1,8 @@
-from transformers import BertTokenizer, BertForMaskedLM
 import torch
+from transformers import BertTokenizer, BertForMaskedLM
 
 
-def load_bert_tokenizer(name:str):
+def load_bert_tokenizer(name: str):
     """
     Load pre-trained tokenizer
     @param name: tokenizer name
@@ -18,5 +18,3 @@ def load_bert_model(model: str) -> torch.nn.Module:
     @return: The `~torch.nn.Module` model on the appropriate device.
     """
     return BertForMaskedLM.from_pretrained(model)
-
-

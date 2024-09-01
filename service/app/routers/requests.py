@@ -14,7 +14,7 @@ from service.data_model.status import Status
 
 logger = logging.getLogger(__name__)
 request_router = APIRouter(prefix="/request", dependencies=[Depends(create_jwt_bearer())],
-                                tags=['request'])
+                           tags=['request'])
 
 controller: BaseController = create_base_controller()
 

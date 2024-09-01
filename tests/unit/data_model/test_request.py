@@ -15,7 +15,7 @@ class DataModelTestCase(unittest.TestCase):
             client="client",
         )
         self.assertListEqual(
-            sorted(list(request.dict().keys())),
+            sorted(list(request.model_dump().keys())),
             sorted(["client", "sentence"])
         )
 
@@ -58,7 +58,7 @@ class DataModelTestCase(unittest.TestCase):
             results=[]
         )
 
-        self.assertEqual(len(m.dict()), 7)
+        self.assertEqual(len(m.model_dump()), 7)
         self.assertEqual(m.client, "client")
         self.assertEqual(m.status, "RUNNING")
 

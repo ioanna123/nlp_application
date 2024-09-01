@@ -36,7 +36,7 @@ class RunMigrationsUpgradeTestCase(unittest.TestCase):
         self.db_session = Session(self.engine)
 
     @pytest.mark.order(1)
-    @mock.patch('ds_metadata_linking.db.factories.create_db_engine')
+    @mock.patch('service.db.factories.create_db_engine')
     def test_alembic_run_initial_migration_creates_tables_ok(self, mock_engine):
         # arrange
         mock_engine.return_value = self.engine
